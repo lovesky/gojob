@@ -13,7 +13,7 @@ build:
 	@echo "build start >>>"
 	go env -w GOPROXY=https://goproxy.io
 	go env -w GOSUMDB=off
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO_CMD) build -o $(GOJOB_BIN) ./main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO_CMD) build -ldflags="-w -s" -o $(GOJOB_BIN) ./main.go
 	@echo ">>> build complete"
 
 .PHONY: install
@@ -25,6 +25,7 @@ install:
 	cp ./conf/app.conf $(GOJOB_CONF_PATH)
 	cp -r ./static $(GOJOB_STATIC_PATH)
 	cp -r ./views $(GOJOB_VIEWS_PATH)
+	tar zcf gojob.tgz -C output gojob conf views static
 	@echo ">>> install complete"
 
 .PHONY: clean
